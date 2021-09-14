@@ -8,7 +8,7 @@
 		<version>2.5.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>info.moevm</groupId>
+	<groupId>info.moevm.se</groupId>
 	<artifactId>nosql-cats-memecached</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>nosql-cats-memecached</name>
@@ -19,7 +19,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter</artifactId>
+			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
 		<dependency>
