@@ -19,12 +19,6 @@
       "localized": "Easy to Groom"
     },
     {
-      "id": "affectionate",
-      "min": 0,
-      "max": 5,
-      "localized": "Affectionate with Family"
-    },
-    {
       "id": "health",
       "min": 0,
       "max": 5,
