@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class NosqlCatsMemecachedApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(NosqlCatsMemecachedApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(NosqlCatsMemecachedApplication.class, args);
+    }
 
 }
