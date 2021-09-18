@@ -2,6 +2,7 @@ import {Component} from "react";
 import LabeledSliderFilter from "./LabeledSliderFilter";
 import SearchField from "./SearchField";
 import filtersManager from './manager';
+import CatsManager from "../list/CatsManager";
 
 class Filters extends Component {
   constructor(props) {
@@ -24,9 +25,8 @@ class Filters extends Component {
   render() {
     let filters = [];
     for (let filter of filtersManager.rangeFilters) {
-      filters.push(<div>
+      filters.push(<div key={filter.id}>
         <LabeledSliderFilter
-          key={filter.id}
           label={filter.localized}
           min={filter.min}
           max={filter.max}
@@ -35,7 +35,7 @@ class Filters extends Component {
       </div>);
     }
     return <div>
-      <h2 className="uk-margin-top">Filters</h2>
+      <h2 className="uk-margin-large-top">Filters</h2>
       <div className="uk-form">
         <SearchField value={filtersManager.searchFilter.value}
                      onChange={(e) => this._onSearchChange(filtersManager.searchFilter, e.target.value)}/>
@@ -45,9 +45,13 @@ class Filters extends Component {
       </div>
       <div>
         <button className="uk-button uk-border-rounded uk-button-primary uk-margin-small-right"
-                onClick={() => console.log("I wasn't found")}>Find me
+                onClick={() => CatsManager.reload()}>Find me
         </button>
-        <button className="uk-button uk-border-rounded" onClick={() => filtersManager.resetFilters()}>Clear</button>
+        <button className="uk-button uk-border-rounded" onClick={() => {
+          filtersManager.resetFilters();
+          CatsManager.reload();
+        }}>Clear
+        </button>
       </div>
     </div>;
   }
