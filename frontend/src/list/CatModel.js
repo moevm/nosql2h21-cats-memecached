@@ -1,5 +1,6 @@
 class CatModel {
-  constructor(raw) {
+  constructor(raw, id) {
+    this.id = id;
     this.name = raw['breed_name'];
     this.care = raw['care'];
     this.characteristics = raw['characteristics'];
