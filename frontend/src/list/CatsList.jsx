@@ -34,8 +34,8 @@ class CatsList extends React.Component {
         <h2 className="uk-margin-large-top">Looking for your cat...</h2>
       </div>;
 
-    let catsList = this.state.cats.map((catModel, index) => <div className="uk-width-1-2 item-wrapper">
-      <CatItem key={index} model={catModel}/>
+    let catsList = this.state.cats.map((catModel, index) => <div key={index} className="uk-width-1-2 item-wrapper">
+      <CatItem model={catModel}/>
     </div>);
     return <div>
       <h2 className="uk-margin-large-top">Found results</h2>
