@@ -15,6 +15,7 @@
     <description>The best app for finding cats</description>
     <properties>
         <java.version>11</java.version>
+        <spymemcached.version>2.12.3</spymemcached.version>
     </properties>
     <dependencies>
         <dependency>
@@ -32,6 +33,15 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/net.spy/spymemcached -->
+        <dependency>
+            <groupId>net.spy</groupId>
+            <artifactId>spymemcached</artifactId>
+            <version>${spymemcached.version}</version>
+        </dependency>
+
+
     </dependencies>
 
     <build>
