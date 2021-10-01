@@ -3,9 +3,11 @@ package info.moevm.se.nosqlcatsmemecached.models.cat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Characteristics {
+public class Characteristics implements Serializable {
     private Integer affectionateWithFamily;
     private Integer amountOfShedding;
     private Integer easyToGroom;
