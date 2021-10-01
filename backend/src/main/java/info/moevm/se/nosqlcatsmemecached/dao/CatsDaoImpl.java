@@ -1,8 +1,8 @@
 package info.moevm.se.nosqlcatsmemecached.dao;
 
 import info.moevm.se.nosqlcatsmemecached.models.cat.Cat;
-import info.moevm.se.nosqlcatsmemecached.models.cat.Characteristics;
-import info.moevm.se.nosqlcatsmemecached.models.cat.VitalStats;
+import info.moevm.se.nosqlcatsmemecached.utils.memcached.CatsMemcachedClient;
+import net.spy.memcached.internal.OperationFuture;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
@@ -12,23 +12,28 @@ import java.util.List;
 @Repository
 @Primary
 public class CatsDaoImpl implements CatsDao {
+
+    private final static int ONE_HUNDRED_DAYS = 60 * 60 * 24 * 100;
+    private final CatsMemcachedClient client;
+
+    public CatsDaoImpl(CatsMemcachedClient client) {
+        this.client = client;
+    }
+
     @Override
-    public boolean addCat(Cat cat) {
-        return false;
+    public OperationFuture<Boolean> addCat(Cat cat) {
+        return client.add(cat.getBreedName(), 30, cat);
     }
 
     @Override
     public List<Cat> getAllCats() {
-        Cat cat = demoCat();
         List<Cat> cats = new ArrayList<>();
-        cats.add(cat);
         return cats;
-
     }
 
     @Override
     public Cat getCat(Long id) {
-        return demoCat();
+        return (Cat) client.get("cat");
     }
 
     @Override
@@ -41,24 +46,4 @@ public class CatsDaoImpl implements CatsDao {
         return false;
     }
 
-    private Cat demoCat() {
-        Cat cat = new Cat();
-        cat.setBreedName("Abyssinian");
-        cat.setCare("The short, fine coat of the Abyssinian is easily...");
-        Characteristics characteristics = new Characteristics();
-        characteristics.setAffectionateWithFamily(3);
-        characteristics.setAmountOfShedding(3);
-        characteristics.setEasyToGroom(3);
-        characteristics.setGeneralHealth(5);
-        characteristics.setKidFriendly(5);
-        cat.setCharacteristics(characteristics);
-        cat.setHealth("Both pedigreed cats and mixed-breed cats have");
-        VitalStats vitalStats = new VitalStats();
-        vitalStats.setLength("12 to 16 inches");
-        vitalStats.setLifeSpan("9 to 15 years");
-        vitalStats.setOrigin("Southeast Asia");
-        vitalStats.setWeight("6 to 10 pounds");
-        cat.setVitalStats(vitalStats);
-        return cat;
-    }
 }
