@@ -36,7 +36,6 @@ public class CatsDaoImpl implements CatsDao {
     // TODO need to be implemented when db is ready
     @Override
     public Cat getCat(String key) {
-        System.out.println((Cat) client.get(key));
         return (Cat) client.get(key);
     }
 

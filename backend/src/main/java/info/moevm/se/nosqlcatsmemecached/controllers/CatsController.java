@@ -27,7 +27,6 @@ public class CatsController {
 
     @GetMapping("/{key}")
     public Cat getCat(@PathVariable("key") String key) {
-        System.out.println(key);
         return catsDao.getCat(key);
     }
 
