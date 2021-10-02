@@ -16,7 +16,6 @@ import java.util.List;
 @Primary
 public class CatsDaoImpl implements CatsDao {
 
-    private final static int ONE_HUNDRED_DAYS = 60 * 60 * 24 * 100;
     private final CatsMemcachedClient client;
 
     public CatsDaoImpl(CatsMemcachedClient client) {
@@ -25,27 +24,31 @@ public class CatsDaoImpl implements CatsDao {
 
     @Override
     public OperationFuture<Boolean> addCat(Cat cat) {
-        return client.add(cat.getBreedName(), 30, cat);
+        return client.add(cat.getBreedName(), 60, cat);
     }
 
+    // TODO need to be implemented when db is ready
     @Override
     public List<Cat> getAllCats() {
-        List<Cat> cats = new ArrayList<>();
-        return cats;
+        return new ArrayList<>();
     }
 
+    // TODO need to be implemented when db is ready
     @Override
-    public Cat getCat(Long id) {
-        return (Cat) client.get("cat");
+    public Cat getCat(String key) {
+        System.out.println((Cat) client.get(key));
+        return (Cat) client.get(key);
     }
 
+    // TODO need to be implemented when db is ready
     @Override
-    public boolean updateCat(Long id, Cat cat) {
+    public boolean updateCat(String key, Cat cat) {
         return false;
     }
 
+    // TODO need to be implemented when db is ready
     @Override
-    public boolean deleteCat(Long id) {
+    public boolean deleteCat(String key) {
         return false;
     }
 

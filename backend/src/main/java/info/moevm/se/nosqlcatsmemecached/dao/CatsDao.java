@@ -10,9 +10,9 @@ public interface CatsDao {
 
     List<Cat> getAllCats();
 
-    Cat getCat(Long id);
+    Cat getCat(String key);
 
-    boolean updateCat(Long id, Cat cat);
+    boolean updateCat(String key, Cat cat);
 
-    boolean deleteCat(Long id);
+    boolean deleteCat(String key);
 }
