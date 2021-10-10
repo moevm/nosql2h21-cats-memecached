@@ -21,5 +21,7 @@ class CatUtilsTest {
         Characteristics characteristics = new Characteristics();
         cat.setCharacteristics(characteristics);
         cat.setVitalStats(new VitalStats());
+        System.out.println(catUtils.characteristicsAsMap(cat));
+        System.out.println(catUtils.vitalStatsAsMap(cat));
     }
 }

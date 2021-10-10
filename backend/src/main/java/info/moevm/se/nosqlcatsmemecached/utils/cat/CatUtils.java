@@ -4,12 +4,11 @@ import info.moevm.se.nosqlcatsmemecached.annotations.InjectMemcachedName;
 import info.moevm.se.nosqlcatsmemecached.models.cat.Cat;
 import info.moevm.se.nosqlcatsmemecached.models.cat.Characteristics;
 import info.moevm.se.nosqlcatsmemecached.models.cat.VitalStats;
+import org.springframework.stereotype.Service;
+
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.function.Function;
-import java.util.stream.Collectors;
-import org.springframework.stereotype.Service;
 
 @Service
 public class CatUtils {
