@@ -2,11 +2,12 @@ package info.moevm.se.nosqlcatsmemecached.dao;
 
 import info.moevm.se.nosqlcatsmemecached.models.cat.Cat;
 import info.moevm.se.nosqlcatsmemecached.utils.memcached.CatsMemcachedClient;
-import java.util.ArrayList;
-import java.util.List;
-import net.spy.memcached.internal.OperationFuture;
+import lombok.SneakyThrows;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Repository
 @Primary
@@ -22,7 +23,7 @@ public class CatsDaoImpl implements CatsDao {
     public boolean addCat(Cat cat) {
         String breedName = cat.getBreedName();
         boolean status = addToTuple("all_cats", breedName);
-        status = status & addCharacteristics(cat.getCharacteristics().getAsMap(), cat.getBreedName());
+//        status = status & addCharacteristics(cat.getCharacteristics().getAsMap(), cat.getBreedName());
         return status;
     }
 

@@ -2,27 +2,14 @@ package info.moevm.se.nosqlcatsmemecached.models.cat;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.gson.annotations.SerializedName;
-import info.moevm.se.nosqlcatsmemecached.annotations.InjectMemcachedName;
 import info.moevm.se.nosqlcatsmemecached.annotations.MemcachedName;
 import lombok.Data;
-import lombok.SneakyThrows;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Data
-@Component
-@Scope("prototype")
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Characteristics implements Serializable {
-
-    @InjectMemcachedName
-    private Map<String, Method> map;
 
     @SerializedName("Affectionate with Family")
     @MemcachedName("affectionate_with_family")
@@ -63,13 +50,4 @@ public class Characteristics implements Serializable {
     @SerializedName("Tendency to Vocalize")
     @MemcachedName("tendency_to_vocalize")
     private Integer tendencyToVocalize;
-
-    @SneakyThrows
-    public Map<String, Integer> getAsMap() {
-        Map<String, Integer> result = new HashMap<>();
-        for (Map.Entry<String, Method> entry : map.entrySet()) {
-            result.put(entry.getKey(), (Integer) entry.getValue().invoke(this));
-        }
-        return result;
-    }
 }

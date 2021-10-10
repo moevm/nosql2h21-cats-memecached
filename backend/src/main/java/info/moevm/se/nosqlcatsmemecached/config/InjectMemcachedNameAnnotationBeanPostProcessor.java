@@ -1,6 +1,7 @@
 package info.moevm.se.nosqlcatsmemecached.config;
 
 import com.google.common.base.CaseFormat;
+import com.google.common.base.Function;
 import info.moevm.se.nosqlcatsmemecached.annotations.InjectMemcachedName;
 import info.moevm.se.nosqlcatsmemecached.annotations.MemcachedName;
 import lombok.SneakyThrows;
@@ -10,10 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Component
@@ -21,32 +19,38 @@ public class InjectMemcachedNameAnnotationBeanPostProcessor implements BeanPostP
     @SneakyThrows
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
+        Map<String, Map<String, Function<?, ?>>> mapsForInject = new HashMap<>();
         Field[] fields = bean.getClass().getDeclaredFields();
         Field injectMemcachedNameField = null;
-        Map<String, Method> mapForInject = new HashMap<>();
         for (Field field : fields) {
             InjectMemcachedName injectMemcachedNameAnnotation = field.getAnnotation(InjectMemcachedName.class);
             if (injectMemcachedNameAnnotation != null) {
-                if (field.getType() == List.class) {
+                if (field.getType() == Map.class) {
                     injectMemcachedNameField = field;
+                    mapsForInject.put(injectMemcachedNameField.getName(), new HashMap<>());
+                    String targetClassName = injectMemcachedNameAnnotation.value();
+                    Class<?> targetClass = Class.forName(targetClassName);
+                    Field[] targetFields = targetClass.getDeclaredFields();
+                    for (Field targetField : targetFields) {
+                        MemcachedName memcachedNameAnnotation = targetField.getAnnotation(MemcachedName.class);
+                        if (memcachedNameAnnotation != null) {
+                            String value = memcachedNameAnnotation.value();
+                            mapsForInject.get(injectMemcachedNameField.getName()).put(value, new Function<>() {
+                                @SneakyThrows
+                                @Override
+                                public Object apply(Object cat) {
+                                    System.out.println(targetClass.getMethod(getterName(value)));
+                                    return targetClass.getMethod(getterName(value)).invoke(cat);
+                                }
+                            });
+                        }
+                    }
+                    injectMemcachedNameField.setAccessible(true);
+                    ReflectionUtils.setField(injectMemcachedNameField, bean, mapsForInject.get(injectMemcachedNameField.getName()));
+                    System.out.println(mapsForInject.get(injectMemcachedNameField.getName()));
                 }
             }
         }
-        if (injectMemcachedNameField == null) {
-            return bean;
-        }
-        for (Field field : fields) {
-            MemcachedName memcachedNameAnnotation = field.getAnnotation(MemcachedName.class);
-            if (memcachedNameAnnotation != null) {
-                String value = memcachedNameAnnotation.value();
-
-                mapForInject.put(value, bean.getClass().getMethod(getterName(value)));
-            }
-        }
-        injectMemcachedNameField.setAccessible(true);
-        ReflectionUtils.setField(injectMemcachedNameField, bean, mapForInject);
-        System.out.println(mapForInject);
-        System.out.println("SSS");
         return bean;
     }
 
