@@ -1,6 +1,7 @@
 package info.moevm.se.nosqlcatsmemecached.dao;
 
 import info.moevm.se.nosqlcatsmemecached.models.cat.Cat;
+import info.moevm.se.nosqlcatsmemecached.utils.cat.CatUtils;
 import info.moevm.se.nosqlcatsmemecached.utils.memcached.CatsMemcachedClient;
 import lombok.SneakyThrows;
 import org.springframework.context.annotation.Primary;
@@ -21,17 +22,31 @@ public class CatsDaoImpl implements CatsDao {
 
     @Override
     public boolean addCat(Cat cat) {
-        String breedName = cat.getBreedName();
+        String breedName = cat.getBreedName().replace(" ", "_");
         boolean status = addToTuple("all_cats", breedName);
-//        status = status & addCharacteristics(cat.getCharacteristics().getAsMap(), cat.getBreedName());
+        status = status & addCompoundCharacteristics(CatUtils.compoundCharacteristicsAsMap(cat), breedName);
+        status = status & addStringCharacteristics(CatUtils.stringCharacteristicsAsMap(cat), breedName);
         return status;
     }
 
-    private boolean addCharacteristics(Map<String, Integer> characteristics, String breedName) {
+    private boolean addStringCharacteristics(Map<String, String> map, String breedName) {
         boolean status = true;
-        for (Map.Entry<String, Integer> characteristic : characteristics.entrySet()) {
+        for (Map.Entry<String, String> characteristic : map.entrySet()) {
             if (characteristic.getValue() != null) {
-                status = status & addToTuple(characteristic.getKey() + "." + characteristic.getValue(), breedName);
+                status = status & addToTuple(
+                        breedName + "." + characteristic.getKey(), characteristic.getValue());
+            }
+        }
+        return status;
+    }
+
+    private boolean addCompoundCharacteristics(Map<String, ?> map, String breedName) {
+        boolean status = true;
+        for (Map.Entry<String, ?> characteristic : map.entrySet()) {
+            if (characteristic.getValue() != null) {
+                status = status & addToTuple(
+                        characteristic.getKey() + "." +
+                                characteristic.getValue().toString().replace(" ", "_"), breedName);
             }
         }
         return status;
@@ -42,14 +57,14 @@ public class CatsDaoImpl implements CatsDao {
         String tupleString = (String) client.get(key);
         boolean status;
         if (tupleString == null) {
-            status = client.add(key, 60, value).get();
+            status = client.add(key, 300, value).get();
         } else {
             Set<String> uniqueValues = Arrays.stream(tupleString.split(";")).collect(Collectors.toSet());
-            boolean isNewValue = uniqueValues.add(key);
+            boolean isNewValue = uniqueValues.add(value);
             if (!isNewValue) {
                 return false;
             }
-            status = client.set(key, 60, String.join(";", uniqueValues)).get();
+            status = client.set(key, 300, String.join(";", uniqueValues)).get();
         }
         return status;
     }

@@ -36,12 +36,7 @@ public class JsonCatsImporterImpl implements CatsImporter {
         Type type = new TypeToken<List<Cat>>() {
         }.getType();
         List<Cat> cats = gson.fromJson(input, type);
-        cats.forEach(this::saveCat);
+        cats.forEach(dao::addCat);
         return true;
-    }
-
-    @SneakyThrows
-    private boolean saveCat(Cat cat) {
-        return dao.addCat(cat);
     }
 }
