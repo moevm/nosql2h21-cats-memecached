@@ -3,10 +3,12 @@ package info.moevm.se.nosqlcatsmemecached.models.cat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
+import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 
 @Data
+@Component
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Cat implements Serializable {
     @SerializedName("breed_name")
