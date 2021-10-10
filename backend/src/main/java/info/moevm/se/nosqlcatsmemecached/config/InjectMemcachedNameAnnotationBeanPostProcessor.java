@@ -39,7 +39,6 @@ public class InjectMemcachedNameAnnotationBeanPostProcessor implements BeanPostP
                                 @SneakyThrows
                                 @Override
                                 public Object apply(Object cat) {
-                                    System.out.println(targetClass.getMethod(getterName(value)));
                                     return targetClass.getMethod(getterName(value)).invoke(cat);
                                 }
                             });
@@ -47,7 +46,6 @@ public class InjectMemcachedNameAnnotationBeanPostProcessor implements BeanPostP
                     }
                     injectMemcachedNameField.setAccessible(true);
                     ReflectionUtils.setField(injectMemcachedNameField, bean, mapsForInject.get(injectMemcachedNameField.getName()));
-                    System.out.println(mapsForInject.get(injectMemcachedNameField.getName()));
                 }
             }
         }

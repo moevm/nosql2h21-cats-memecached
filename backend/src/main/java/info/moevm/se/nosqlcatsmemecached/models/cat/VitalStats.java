@@ -17,7 +17,7 @@ public class VitalStats implements Serializable {
     private String length;
 
     @SerializedName("Life Span")
-    @MemcachedName("lifeSpan")
+    @MemcachedName("life_span")
     private String lifeSpan;
 
     @SerializedName("Origin")
