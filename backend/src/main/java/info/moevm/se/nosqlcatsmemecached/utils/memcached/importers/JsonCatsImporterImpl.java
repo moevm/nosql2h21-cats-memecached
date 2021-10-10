@@ -43,6 +43,5 @@ public class JsonCatsImporterImpl implements CatsImporter {
     @SneakyThrows
     private boolean saveCat(Cat cat) {
         return dao.addCat(cat);
-
     }
 }
