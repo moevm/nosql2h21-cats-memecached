@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.lang.reflect.Type;
 import java.util.List;
 
 @Service
@@ -32,11 +31,8 @@ public class JsonCatsImporterImpl implements CatsImporter {
     }
 
     private boolean readJson(String input) {
-        Gson gson = new Gson();
-        Type type = new TypeToken<List<Cat>>() {
-        }.getType();
-        List<Cat> cats = gson.fromJson(input, type);
-        cats.forEach(dao::addCat);
-        return true;
+        List<Cat> cats = new Gson().fromJson(input, new TypeToken<List<Cat>>() {
+        }.getType());
+        return cats.stream().allMatch(dao::addCat);
     }
 }

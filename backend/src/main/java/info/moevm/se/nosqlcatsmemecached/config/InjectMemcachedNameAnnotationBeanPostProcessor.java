@@ -16,26 +16,25 @@ import java.util.Map;
 
 @Component
 public class InjectMemcachedNameAnnotationBeanPostProcessor implements BeanPostProcessor {
-    @SneakyThrows
+
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
         Field[] fields = bean.getClass().getDeclaredFields();
         Field injectMemcachedNameField;
         for (Field field : fields) {
             InjectMemcachedName injectMemcachedNameAnnotation = field.getAnnotation(InjectMemcachedName.class);
-            if (injectMemcachedNameAnnotation != null) {
-                if (field.getType() == Map.class) {
-                    injectMemcachedNameField = field;
-                    String targetClassName = injectMemcachedNameAnnotation.value();
-                    injectMemcachedNameField.setAccessible(true);
-                    ReflectionUtils.setField(injectMemcachedNameField, bean, getMapForInject(targetClassName));
-                }
+            if (injectMemcachedNameAnnotation != null && field.getType() == Map.class) {
+                injectMemcachedNameField = field;
+                String targetClassName = injectMemcachedNameAnnotation.value();
+                injectMemcachedNameField.setAccessible(true);
+                ReflectionUtils.setField(injectMemcachedNameField, bean, getMapForInject(targetClassName));
             }
         }
         return bean;
     }
 
-    private Map<String, Function<?, ?>> getMapForInject(String className) throws ClassNotFoundException {
+    @SneakyThrows
+    private Map<String, Function<?, ?>> getMapForInject(String className) {
         Map<String, Function<?, ?>> map = new HashMap<>();
         Class<?> targetClass = Class.forName(className);
         Field[] targetFields = targetClass.getDeclaredFields();

@@ -49,7 +49,7 @@ public class CatsController {
 
     @SneakyThrows
     @PutMapping()
-    public ResponseEntity<Void> importDataBase() {
+    public ResponseEntity<Void> importDatabase() {
         boolean isCorrect = importer.from(new File("all-cats.json"));
         if (isCorrect) {
             return new ResponseEntity<>(HttpStatus.OK);

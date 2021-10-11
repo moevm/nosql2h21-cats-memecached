@@ -14,6 +14,8 @@ import java.util.stream.Collectors;
 @Primary
 public class CatsDaoImpl implements CatsDao {
 
+    private final int EXP_TIME_IN_SECONDS = 300;
+
     private final CatsMemcachedClient client;
 
     public CatsDaoImpl(CatsMemcachedClient client) {
@@ -35,7 +37,7 @@ public class CatsDaoImpl implements CatsDao {
         for (Map.Entry<String, String> characteristic : map.entrySet()) {
             if (characteristic.getValue() != null) {
                 status = status & client.add(
-                        breedName + "." + characteristic.getKey(), 300, characteristic.getValue()).get();
+                        breedName + "." + characteristic.getKey(), EXP_TIME_IN_SECONDS, characteristic.getValue()).get();
             }
         }
         return status;
@@ -56,18 +58,13 @@ public class CatsDaoImpl implements CatsDao {
     @SneakyThrows
     private boolean addToTuple(String key, String value) {
         String tupleString = (String) client.get(key);
-        boolean status;
-        if (tupleString == null) {
-            status = client.add(key, 300, value).get();
-        } else {
-            Set<String> uniqueValues = Arrays.stream(tupleString.split(";")).collect(Collectors.toSet());
-            boolean isNewValue = uniqueValues.add(value);
-            if (!isNewValue) {
-                return false;
-            }
-            status = client.set(key, 300, String.join(";", uniqueValues)).get();
+        if (tupleString == null)
+            return client.add(key, EXP_TIME_IN_SECONDS, value).get();
+        Set<String> uniqueValues = Arrays.stream(tupleString.split(";")).collect(Collectors.toSet());
+        if (!uniqueValues.add(value)) {
+            return false;
         }
-        return status;
+        return client.set(key, EXP_TIME_IN_SECONDS, String.join(";", uniqueValues)).get();
     }
 
     // TODO need to be implemented when db is ready
@@ -93,5 +90,4 @@ public class CatsDaoImpl implements CatsDao {
     public boolean deleteCat(String key) {
         return false;
     }
-
 }
