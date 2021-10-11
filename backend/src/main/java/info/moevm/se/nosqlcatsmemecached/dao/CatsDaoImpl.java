@@ -29,12 +29,13 @@ public class CatsDaoImpl implements CatsDao {
         return status;
     }
 
+    @SneakyThrows
     private boolean addStringCharacteristics(Map<String, String> map, String breedName) {
         boolean status = true;
         for (Map.Entry<String, String> characteristic : map.entrySet()) {
             if (characteristic.getValue() != null) {
-                status = status & addToTuple(
-                        breedName + "." + characteristic.getKey(), characteristic.getValue());
+                status = status & client.add(
+                        breedName + "." + characteristic.getKey(), 300, characteristic.getValue()).get();
             }
         }
         return status;
