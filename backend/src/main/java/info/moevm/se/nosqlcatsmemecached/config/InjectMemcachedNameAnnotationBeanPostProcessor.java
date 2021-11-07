@@ -1,18 +1,18 @@
 package info.moevm.se.nosqlcatsmemecached.config;
 
 import com.google.common.base.CaseFormat;
-import com.google.common.base.Function;
 import info.moevm.se.nosqlcatsmemecached.annotations.InjectMemcachedName;
 import info.moevm.se.nosqlcatsmemecached.annotations.MemcachedName;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import lombok.SneakyThrows;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ReflectionUtils;
-
-import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.Map;
 
 @Component
 public class InjectMemcachedNameAnnotationBeanPostProcessor implements BeanPostProcessor {
@@ -27,35 +27,34 @@ public class InjectMemcachedNameAnnotationBeanPostProcessor implements BeanPostP
                 injectMemcachedNameField = field;
                 String targetClassName = injectMemcachedNameAnnotation.value();
                 injectMemcachedNameField.setAccessible(true);
-                ReflectionUtils.setField(injectMemcachedNameField, bean, getMapForInject(targetClassName));
+                ReflectionUtils.setField(injectMemcachedNameField, bean,
+                    getMapForInject(injectMemcachedNameAnnotation.value(), injectMemcachedNameAnnotation.type()));
             }
         }
         return bean;
     }
 
     @SneakyThrows
-    private Map<String, Function<?, ?>> getMapForInject(String className) {
-        Map<String, Function<?, ?>> map = new HashMap<>();
+    private Map<String, Method> getMapForInject(String className, String type) {
+        Map<String, Method> map = new HashMap<>();
         Class<?> targetClass = Class.forName(className);
         Field[] targetFields = targetClass.getDeclaredFields();
         for (Field targetField : targetFields) {
             MemcachedName memcachedNameAnnotation = targetField.getAnnotation(MemcachedName.class);
             if (memcachedNameAnnotation != null) {
                 String value = memcachedNameAnnotation.value();
-                map.put(value, new Function<>() {
-                    @SneakyThrows
-                    @Override
-                    public Object apply(Object cat) {
-                        return targetClass.getMethod(getterName(value)).invoke(cat);
-                    }
-                });
+                String name = type.equals("getter") ? methodName(value, "get_") : methodName(value, "set_");
+                map.put(value,
+                    Arrays.stream(targetClass.getDeclaredMethods())
+                          .filter(method -> method.getName().contains(name)).findFirst()
+                          .get());
             }
         }
         return map;
     }
 
-    private String getterName(String fieldName) {
-        return CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, "get_" + fieldName);
+    private String methodName(String name, String prefix) {
+        return CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, prefix + name);
     }
 
     @Override

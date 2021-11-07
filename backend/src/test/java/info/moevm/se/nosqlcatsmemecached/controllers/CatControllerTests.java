@@ -1,4 +1,4 @@
-package info.moevm.se.nosqlcatsmemecached;
+package info.moevm.se.nosqlcatsmemecached.controllers;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -25,6 +25,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -79,20 +80,16 @@ public class CatControllerTests {
     @SuppressWarnings("all")
     @Test
     public void addCatRequest() {
-        OperationFuture catFutureSuccess = Mockito.mock(OperationFuture.class);
-        doReturn(true).when(catFutureSuccess).get();
-        OperationFuture catFutureFail = Mockito.mock(OperationFuture.class);
-        doReturn(false).when(catFutureFail).get();
 
         // success case
-        given(catsDao.addCat(any(Cat.class))).willReturn(catFutureSuccess);
+        given(catsDao.addCat(any(Cat.class))).willReturn(true);
         mvc.perform(post("/cats")
             .contentType(MediaType.APPLICATION_JSON)
             .content(new ObjectMapper().writeValueAsString(allCatsList.get(0))))
            .andExpect(status().is2xxSuccessful());
 
         // fail case
-        given(catsDao.addCat(any(Cat.class))).willReturn(catFutureFail);
+        given(catsDao.addCat(any(Cat.class))).willReturn(true);
         mvc.perform(post("/cats")
             .contentType(MediaType.APPLICATION_JSON)
             .content(new ObjectMapper().writeValueAsString(allCatsList.get(0))))
