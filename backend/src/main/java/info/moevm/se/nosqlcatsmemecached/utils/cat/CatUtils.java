@@ -8,6 +8,9 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
@@ -15,25 +18,25 @@ import org.springframework.stereotype.Service;
 public class CatUtils {
 
     @InjectMemcachedName(value = "info.moevm.se.nosqlcatsmemecached.models.cat.Characteristics", type = "getter")
-    private static Map<String, Method> characteristicsKeyToGetter;
+    private Map<String, Method> characteristicsKeyToGetter;
 
     @InjectMemcachedName(value = "info.moevm.se.nosqlcatsmemecached.models.cat.VitalStats", type = "getter")
-    private static Map<String, Method> vitalStatsKeyToGetter;
+    private Map<String, Method> vitalStatsKeyToGetter;
 
     @InjectMemcachedName(value = "info.moevm.se.nosqlcatsmemecached.models.cat.Cat", type = "getter")
-    private static Map<String, Method> catsKeyToGetter;
+    private Map<String, Method> catsKeyToGetter;
 
     @InjectMemcachedName(value = "info.moevm.se.nosqlcatsmemecached.models.cat.Characteristics", type = "setter")
-    private static Map<String, Method> characteristicsKeyToSetter;
+    private Map<String, Method> characteristicsKeyToSetter;
 
     @InjectMemcachedName(value = "info.moevm.se.nosqlcatsmemecached.models.cat.VitalStats", type = "setter")
-    private static Map<String, Method> vitalStatsKeyToSetter;
+    private Map<String, Method> vitalStatsKeyToSetter;
 
     @InjectMemcachedName(value = "info.moevm.se.nosqlcatsmemecached.models.cat.Cat", type = "setter")
-    private static Map<String, Method> catsKeyToSetter;
+    private Map<String, Method> catsKeyToSetter;
 
     @SneakyThrows
-    public static <T> Map<String, T> compoundCharacteristicsAsMap(Cat cat) {
+    public <T> Map<String, T> compoundCharacteristicsAsMap(Cat cat) {
         HashMap<String, T> hashMap = new HashMap<>();
         for (var entry : characteristicsKeyToGetter.entrySet()) {
             hashMap.put(entry.getKey(), cast(entry.getValue().invoke(cat.getCharacteristics())));
@@ -45,7 +48,7 @@ public class CatUtils {
     }
 
     @SneakyThrows
-    public static Map<String, String> stringCharacteristicsAsMap(Cat cat) {
+    public Map<String, String> stringCharacteristicsAsMap(Cat cat) {
         HashMap<String, String> hashMap = new HashMap<>();
         for (var entry : catsKeyToGetter.entrySet()) {
             hashMap.put(entry.getKey(), cast(entry.getValue().invoke(cat)));
@@ -53,12 +56,21 @@ public class CatUtils {
         return hashMap;
     }
 
+    public Set<String> compoundCharacteristics() {
+        return Stream.concat(characteristicsKeyToGetter.keySet().stream(), vitalStatsKeyToGetter.keySet().stream())
+                     .collect(Collectors.toSet());
+    }
+
+    public Set<String> stringCharacteristics() {
+        return catsKeyToGetter.keySet();
+    }
+
     @SuppressWarnings("all")
     private static <T, U> U cast(T obj) {
         return (U) obj;
     }
 
-    public static Cat catFromKeyValueList(List<List<Object>> listOfKeyValuePairs) {
+    public Cat catFromKeyValueList(List<List<Object>> listOfKeyValuePairs) {
         Cat cat = new Cat();
         VitalStats vitalStats = new VitalStats();
         Characteristics characteristics = new Characteristics();
@@ -72,7 +84,7 @@ public class CatUtils {
 
     @SneakyThrows
     @SuppressWarnings("all")
-    private static void setField(Object key, Object value, Cat cat, VitalStats vitalStats,
+    private void setField(Object key, Object value, Cat cat, VitalStats vitalStats,
                                  Characteristics characteristics) {
         if (catsKeyToSetter.containsKey(key)) {
             catsKeyToSetter.get(key).invoke(cat, new Object[] {value});
