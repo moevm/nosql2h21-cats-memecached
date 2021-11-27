@@ -86,6 +86,7 @@ public class CatUtils {
     @SuppressWarnings("all")
     private void setField(Object key, Object value, Cat cat, VitalStats vitalStats,
                                  Characteristics characteristics) {
+        key = String.valueOf(key).replaceAll("\"", "");
         if (catsKeyToSetter.containsKey(key)) {
             catsKeyToSetter.get(key).invoke(cat, new Object[] {value});
         } else if (vitalStatsKeyToSetter.containsKey(key)) {
