@@ -10,13 +10,5 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class CatUtilsTest {
 
-    @Test
-    void test(){
-        Cat cat = new Cat();
-        Characteristics characteristics = new Characteristics();
-        cat.setCharacteristics(characteristics);
-        cat.setVitalStats(new VitalStats());
-        System.out.println(CatUtils.compoundCharacteristicsAsMap(cat));
-        System.out.println(CatUtils.stringCharacteristicsAsMap(cat));
-    }
+
 }
