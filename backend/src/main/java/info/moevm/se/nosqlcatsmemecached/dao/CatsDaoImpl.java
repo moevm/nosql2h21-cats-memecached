@@ -9,11 +9,11 @@ import info.moevm.se.nosqlcatsmemecached.utils.memcached.MemcachedUtils;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
@@ -80,13 +80,10 @@ public class CatsDaoImpl implements CatsDao {
                     .collect(Collectors.toList());
     }
 
+    @SneakyThrows
     @Override
-    public Map<String, String> dump() {
-        return client.getAllKeys().stream()
-                     .collect(Collectors.toMap(
-                         String::valueOf,
-                         key -> String.valueOf(client.get(key)))
-                     );
+    public void drop() {
+        client.flush().get();
     }
 
     private Set<String> getCatsByFilter(CatFilter catFilter) {

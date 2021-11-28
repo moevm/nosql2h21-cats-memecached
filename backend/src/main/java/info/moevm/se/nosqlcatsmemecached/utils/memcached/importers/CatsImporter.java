@@ -5,5 +5,5 @@ import java.io.File;
 public interface CatsImporter {
     boolean from(File input);
 
-    boolean from(String jsonString);
+    boolean from(String string);
 }

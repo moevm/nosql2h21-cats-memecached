@@ -5,15 +5,13 @@ import info.moevm.se.nosqlcatsmemecached.models.cat.Cat;
 import info.moevm.se.nosqlcatsmemecached.models.cat.CatQuery;
 import info.moevm.se.nosqlcatsmemecached.utils.memcached.exporters.CatsExporter;
 import info.moevm.se.nosqlcatsmemecached.utils.memcached.importers.CatsImporter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,7 +33,9 @@ public class CatsController {
 
     private final CatsExporter exporter;
 
-    public CatsController(CatsDao catsDao, CatsImporter importer, CatsExporter exporter) {
+    public CatsController(CatsDao catsDao,
+                          @Qualifier("jsonCatsImporterImpl" )CatsImporter importer,
+                          @Qualifier("jsonCatsExporterImpl") CatsExporter exporter) {
         this.catsDao = catsDao;
         this.importer = importer;
         this.exporter = exporter;
@@ -79,11 +79,6 @@ public class CatsController {
     @GetMapping("/export")
     public String exportDatabase() {
         return exporter.export();
-    }
-
-    @GetMapping("/dump")
-    public Map<String, String> dumpMemcachedPairs() {
-        return catsDao.dump();
     }
 
 }

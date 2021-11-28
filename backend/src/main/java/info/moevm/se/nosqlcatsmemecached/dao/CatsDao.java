@@ -1,10 +1,8 @@
 package info.moevm.se.nosqlcatsmemecached.dao;
 
 import info.moevm.se.nosqlcatsmemecached.models.cat.Cat;
-
 import info.moevm.se.nosqlcatsmemecached.models.cat.CatQuery;
 import java.util.List;
-import java.util.Map;
 
 public interface CatsDao {
     boolean addCat(Cat cat);
@@ -19,5 +17,5 @@ public interface CatsDao {
 
     List<Cat> getCatsByQuery(CatQuery query);
 
-    Map<String, String> dump();
+    void drop();
 }
