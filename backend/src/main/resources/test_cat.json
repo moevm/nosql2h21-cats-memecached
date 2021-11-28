@@ -1,0 +1,30 @@
+[
+    {
+        "breed_name": "Test cat",
+        "care": "ap",
+        "characteristics": {
+            "Affectionate with Family": 3,
+            "Amount of Shedding": 3,
+            "Easy to Groom": 3,
+            "General Health": 2,
+            "Intelligence": 5,
+            "Kid-Friendly": 5,
+            "Pet Friendly": 5,
+            "Potential for Playfulness": 5
+        },
+        "children_and_pets": "cop",
+        "color_and_grooming": "crop",
+        "health": "pup",
+        "history": "schmewp",
+        "personality": "oofp",
+        "round_img_url": "https://cattime.com/assets/uploads/2011/12/file_2678_Abyssinian-cat-breed.jpg",
+        "short_description": "uip",
+        "size": "lop",
+        "vital_stats": {
+            "Length": "12 to 16 inches",
+            "Life Span": "9 to 15 years",
+            "Origin": "Southeast Asia",
+            "Weight": "6 to 10 pounds"
+        }
+    }
+]
