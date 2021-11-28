@@ -6,15 +6,13 @@ import info.moevm.se.nosqlcatsmemecached.models.cat.CatQuery;
 import info.moevm.se.nosqlcatsmemecached.utils.cat.CatUtils;
 import info.moevm.se.nosqlcatsmemecached.utils.memcached.CatsMemcachedClient;
 import info.moevm.se.nosqlcatsmemecached.utils.memcached.MemcachedUtils;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
@@ -80,6 +78,15 @@ public class CatsDaoImpl implements CatsDao {
                     .map(this::getCat)
                     .filter(cat -> !cat.getBreedName().isBlank())
                     .collect(Collectors.toList());
+    }
+
+    @Override
+    public Map<String, String> dump() {
+        return client.getAllKeys().stream()
+                     .collect(Collectors.toMap(
+                         String::valueOf,
+                         key -> String.valueOf(client.get(key)))
+                     );
     }
 
     private Set<String> getCatsByFilter(CatFilter catFilter) {

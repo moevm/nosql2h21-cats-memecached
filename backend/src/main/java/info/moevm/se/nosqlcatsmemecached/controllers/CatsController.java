@@ -7,6 +7,8 @@ import info.moevm.se.nosqlcatsmemecached.utils.memcached.exporters.CatsExporter;
 import info.moevm.se.nosqlcatsmemecached.utils.memcached.importers.CatsImporter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,6 +79,11 @@ public class CatsController {
     @GetMapping("/export")
     public String exportDatabase() {
         return exporter.export();
+    }
+
+    @GetMapping("/dump")
+    public Map<String, String> dumpMemcachedPairs() {
+        return catsDao.dump();
     }
 
 }
