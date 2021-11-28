@@ -35,7 +35,6 @@ public class JsonCatsImporterImpl implements CatsImporter {
     }
 
     private boolean readJson(String input) {
-        System.out.println(input);
         List<Cat> cats = new Gson().fromJson(input, new TypeToken<List<Cat>>() {
         }.getType());
         return cats.stream().allMatch(dao::addCat);

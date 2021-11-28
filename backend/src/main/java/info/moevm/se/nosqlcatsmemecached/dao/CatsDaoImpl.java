@@ -40,7 +40,7 @@ public class CatsDaoImpl implements CatsDao {
     @Override
     public List<Cat> getAllCats() {
         var breedNames = memcachedUtils.tupleFrom(String.valueOf(client.get("all_cats")));
-        return breedNames.stream().map(this::getCat).collect(Collectors.toList());
+        return breedNames.stream().sorted().map(this::getCat).collect(Collectors.toList());
     }
 
     @Override

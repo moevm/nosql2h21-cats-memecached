@@ -27,7 +27,7 @@ public class MemcachedInitializationRunner implements ApplicationRunner {
         client.flush().get();
         LOG.info("Initializing memcached data from default file");
         importer.from(new File(MemcachedInitializationRunner.class
-            .getClassLoader().getResource("all-cats.json").getFile())
+            .getClassLoader().getResource("all-cats-new.json").getFile())
         );
     }
 }
