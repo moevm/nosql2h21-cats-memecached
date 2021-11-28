@@ -1,5 +1,6 @@
 package info.moevm.se.nosqlcatsmemecached.dao;
 
+import com.google.common.base.CaseFormat;
 import info.moevm.se.nosqlcatsmemecached.models.cat.Cat;
 import info.moevm.se.nosqlcatsmemecached.models.cat.CatFilter;
 import info.moevm.se.nosqlcatsmemecached.models.cat.CatQuery;
@@ -100,9 +101,7 @@ public class CatsDaoImpl implements CatsDao {
     private String getFilterString(String localized, int value) {
         return String.format(
             "%s.%s",
-            localized.replace(" ", "_")
-                     .replace("-", "_")
-                     .toLowerCase(),
+            CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, localized),
             value
         );
     }
