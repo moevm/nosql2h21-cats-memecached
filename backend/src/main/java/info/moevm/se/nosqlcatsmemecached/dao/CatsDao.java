@@ -2,6 +2,7 @@ package info.moevm.se.nosqlcatsmemecached.dao;
 
 import info.moevm.se.nosqlcatsmemecached.models.cat.Cat;
 
+import info.moevm.se.nosqlcatsmemecached.models.cat.CatQuery;
 import java.util.List;
 
 public interface CatsDao {
@@ -14,4 +15,6 @@ public interface CatsDao {
     boolean updateCat(String key, Cat cat);
 
     boolean deleteCat(String key);
+
+    List<Cat> getCatsByQuery(CatQuery query);
 }

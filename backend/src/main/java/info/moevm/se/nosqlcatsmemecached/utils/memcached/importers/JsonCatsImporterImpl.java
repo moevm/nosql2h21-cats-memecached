@@ -30,6 +30,11 @@ public class JsonCatsImporterImpl implements CatsImporter {
         return readJson(jsonString);
     }
 
+    @Override
+    public boolean from(String jsonString) {
+        return readJson(jsonString);
+    }
+
     private boolean readJson(String input) {
         List<Cat> cats = new Gson().fromJson(input, new TypeToken<List<Cat>>() {
         }.getType());

@@ -1,18 +1,21 @@
 package info.moevm.se.nosqlcatsmemecached.dao;
 
-import info.moevm.se.nosqlcatsmemecached.config.MemcachedConfig;
 import info.moevm.se.nosqlcatsmemecached.models.cat.Cat;
+import info.moevm.se.nosqlcatsmemecached.models.cat.CatFilter;
+import info.moevm.se.nosqlcatsmemecached.models.cat.CatQuery;
 import info.moevm.se.nosqlcatsmemecached.utils.cat.CatUtils;
 import info.moevm.se.nosqlcatsmemecached.utils.memcached.CatsMemcachedClient;
 import info.moevm.se.nosqlcatsmemecached.utils.memcached.MemcachedUtils;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
@@ -64,5 +67,39 @@ public class CatsDaoImpl implements CatsDao {
         boolean status = memcachedUtils.deleteFromTuple("all_cats", key);
         status &= memcachedUtils.deleteCompoundAndStringCharacteristics(key);
         return status;
+    }
+
+    @Override
+    public List<Cat> getCatsByQuery(CatQuery query) {
+        return query.getFilters().stream()
+                    .map(this::getCatsByFilter)
+                    .reduce((lhs, rhs) -> {
+                        lhs.retainAll(rhs);
+                        return lhs;
+                    }).orElseGet(HashSet::new).stream()
+                    .map(this::getCat)
+                    .filter(cat -> !cat.getBreedName().isBlank())
+                    .collect(Collectors.toList());
+    }
+
+    private Set<String> getCatsByFilter(CatFilter catFilter) {
+        return IntStream.rangeClosed(catFilter.getMin(), catFilter.getMax())
+                        .mapToObj(value -> client.get(getFilterString(catFilter.getLocalized(), value)))
+                        .map(String::valueOf)
+                        .map(memcachedUtils::tupleFrom)
+                        .reduce((lhs, rhs) -> {
+                            lhs.addAll(rhs);
+                            return lhs;
+                        }).orElseGet(HashSet::new);
+    }
+
+    private String getFilterString(String localized, int value) {
+        return String.format(
+            "%s.%s",
+            localized.replace(" ", "_")
+                     .replace("-", "_")
+                     .toLowerCase(),
+            value
+        );
     }
 }
