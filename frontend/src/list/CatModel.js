@@ -1,6 +1,13 @@
 class CatModel {
-  constructor(raw, id) {
-    this.id = id;
+  constructor(raw, id = null) {
+    if (raw['breedName'] == null)
+      throw Error("AAAAAAAA breedName is null!");
+
+    if (id != null)
+      this.id = id;
+    else
+      this.id = raw['breedName'].replaceAll(" ", "_");
+
     this.name = raw['breedName'];
     this.care = raw['care'];
     this.characteristics = raw['characteristics'];
