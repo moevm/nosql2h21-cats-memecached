@@ -1,13 +1,11 @@
 package info.moevm.se.nosqlcatsmemecached.utils.memcached;
 
 import info.moevm.se.nosqlcatsmemecached.config.MemcachedConfig;
-import info.moevm.se.nosqlcatsmemecached.models.cat.Cat;
 import info.moevm.se.nosqlcatsmemecached.utils.cat.CatUtils;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +32,7 @@ public class MemcachedUtils {
     }
 
     public String keyName(String... items) {
-        return String.join(config.getFieldSeparator(), items);
+        return String.join(config.getFieldSeparator(), items).replaceAll("\"", "");
     }
 
     @SneakyThrows

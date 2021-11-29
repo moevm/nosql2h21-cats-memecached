@@ -6,15 +6,12 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import info.moevm.se.nosqlcatsmemecached.dao.CatsDao;
 import info.moevm.se.nosqlcatsmemecached.models.cat.Cat;
-import lombok.SneakyThrows;
-import org.springframework.context.annotation.Primary;
-import org.springframework.stereotype.Service;
-
 import java.io.File;
 import java.util.List;
+import lombok.SneakyThrows;
+import org.springframework.stereotype.Service;
 
 @Service
-@Primary
 public class JsonCatsImporterImpl implements CatsImporter {
 
     private final CatsDao dao;
@@ -26,7 +23,14 @@ public class JsonCatsImporterImpl implements CatsImporter {
     @SneakyThrows
     @Override
     public boolean from(File input) {
+        dao.drop();
         String jsonString = String.join("", Files.readLines(input, Charsets.UTF_8));
+        return readJson(jsonString);
+    }
+
+    @Override
+    public boolean from(String jsonString) {
+        dao.drop();
         return readJson(jsonString);
     }
 
