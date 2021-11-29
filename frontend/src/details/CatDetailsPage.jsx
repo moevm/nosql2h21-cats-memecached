@@ -17,7 +17,8 @@ class CatDetailsPage extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    this._loadIfNeed();
+    if (prevProps?.match?.params?.catId !== this._extractCatId())
+      this._loadIfNeed();
   }
 
   componentDidMount() {
