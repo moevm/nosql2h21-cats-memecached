@@ -6,7 +6,6 @@ import info.moevm.se.nosqlcatsmemecached.models.cat.CatQuery;
 import info.moevm.se.nosqlcatsmemecached.utils.memcached.exporters.CatsExporter;
 import info.moevm.se.nosqlcatsmemecached.utils.memcached.importers.CatsImporter;
 import java.util.List;
-import java.util.Map;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -51,7 +49,7 @@ public class CatsController {
         return catsDao.getCat(key);
     }
 
-    @GetMapping("/filter")
+    @PostMapping("/filter")
     public List<Cat> getCatsByQuery(@RequestBody CatQuery query) {
         return catsDao.getCatsByQuery(query);
     }
@@ -67,7 +65,7 @@ public class CatsController {
     }
 
     @SneakyThrows
-    @PutMapping("/import")
+    @PostMapping("/import")
     public ResponseEntity<Void> importDatabase(@RequestBody String catsJson) {
         boolean isCorrect = importer.from(catsJson);
         if (isCorrect) {
