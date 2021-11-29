@@ -24,11 +24,11 @@ public class MemcachedUtils {
     private final CatUtils catUtils;
 
     public Set<String> tupleFrom(String tupleString) {
-        return Arrays.stream(tupleString.split(config.getTupleSeparator())).collect(Collectors.toSet());
+        return Arrays.stream(tupleString.split(config.getTupleSeparator().replace("\"", ""))).collect(Collectors.toSet());
     }
 
     public String stringFrom(Set<String> uniqueValues) {
-        return String.join(config.getTupleSeparator(), uniqueValues);
+        return String.join(config.getTupleSeparator().replace("\"",""), uniqueValues);
     }
 
     public String keyName(String... items) {
