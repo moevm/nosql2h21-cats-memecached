@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 @Component
 @Data
 public class CatFilter {
-    String id;
     int min;
     int max;
     String localized;
