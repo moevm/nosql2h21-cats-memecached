@@ -1,8 +1,0 @@
-<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-<suite name="allTests">
-  <test name="catCatalogueAllTests">
-    <packages>
-      <package name="info.moevm.se.nosqlcatsmemecachedautotests"/>
-    </packages>
-  </test>
-</suite>
