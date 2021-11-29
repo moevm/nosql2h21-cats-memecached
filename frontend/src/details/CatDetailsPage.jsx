@@ -3,6 +3,7 @@ import CatsManager from "../list/CatsManager";
 import PageRoot from "../app/PageRoot";
 import {Link} from "react-router-dom";
 import "./CatDetailsPage.css";
+import FiltersConfig from "../filters/filters-config.json";
 
 function CharacteristicsCard(props) {
   return <div className="uk-panel-box uk-panel-box-secondary uk-margin-right uk-margin-bottom">
@@ -17,7 +18,8 @@ class CatDetailsPage extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    this._loadIfNeed();
+    if (prevProps?.match?.params?.catId !== this._extractCatId())
+      this._loadIfNeed();
   }
 
   componentDidMount() {
@@ -89,7 +91,8 @@ class CatDetailsPage extends React.Component {
       <h3>Breed Characteristics:</h3>
       <div className="uk-flex uk-flex-wrap">
         {Object.keys(model.characteristics).map(key => {
-          return <CharacteristicsCard key={key} name={key} value={model.characteristics[key]}/>
+          let filter = FiltersConfig.filters.find((e) => e.id === key);
+          return <CharacteristicsCard key={key} name={filter?.localized ?? key} value={model.characteristics[key]}/>
         })}
       </div>
       <h3>Vital stats:</h3>

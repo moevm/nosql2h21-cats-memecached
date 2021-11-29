@@ -1,50 +1,86 @@
-import AllCatsConfig from './all-cats.json';
 import CatModel from "./CatModel";
 import Notifier from "../utils/Notifier";
 import FiltersManager from "../filters/manager";
+import AppConfig from "../config.json";
 
 class CatsManager extends Notifier {
-  constructor() {
-    super();
-    this._currentSession = 0;
-    this.loading = false;
-    this.cats = [];
-    this.reload();
-  }
-
-  async reload() {
-    this._currentSession++;
-    let session = this._currentSession;
-    this.loading = true;
-    this.notifyListeners();
-
-    let newCats = await this._loadAllInner();
-
-    if (session !== this._currentSession) {
-      console.log("Session became invalid, search results will not be applied");
-      return;
+    constructor() {
+        super();
+        this._currentSession = 0;
+        this.loading = false;
+        this.cats = [];
     }
 
-    if (newCats)
-      this.cats = newCats;
+    async loadSingle(catId) {
+        catId = catId.replaceAll(" ", "_");
+        try {
+            let url = new URL(`/cats/${catId}`, AppConfig.serverUrl).href;
+            let response = await fetch(url);
+            response = await response.json();
+            console.log("Cat's data loaded");
+            console.log(response);
+            return new CatModel(response, catId);
+        } catch (e) {
+            console.log(e);
+            return null;
+        } finally {
+            this.notifyListeners();
+        }
+    }
 
-    this.loading = false;
-    this.notifyListeners();
-  }
+    async reloadAll() {
+        this._currentSession++;
+        let session = this._currentSession;
+        try {
+            let url = new URL(`/cats`, AppConfig.serverUrl).href;
+            let response = await fetch(url);
+            response = await response.json();
+            if (this._currentSession !== session) return;
+            this._applyCats(response)
+            console.log("Cats loaded")
+            console.log(this.cats);
+        } catch (e) {
+            console.log(e);
+        } finally {
+            if (this._currentSession === session)
+                this.notifyListeners();
+        }
+    }
 
-  async loadSingle(catId) {
-    let allCats = await this._loadAllInner();
-    return allCats.find(cat => cat.id === catId);
-  }
+    async reloadFiltered() {
+        this._currentSession++;
+        let session = this._currentSession;
+        try {
+            const requestOptions = {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: FiltersManager.toJsonParameters(),
+            };
+            let url = new URL("/cats/filter", AppConfig.serverUrl).href;
+            let response = await fetch(url, requestOptions);
+            response = await response.json();
+            if (this._currentSession !== session) return;
+            this._applyCats(response);
+        } catch (e) {
+            console.log(e);
+        } finally {
+            this.notifyListeners();
+        }
+    }
 
-  async _loadAllInner() {
-    // TODO will be used in requests
-    let params = FiltersManager.toUrlParameters();
-    // imitating request delay
-    await new Promise(resolve => setTimeout(resolve,1000));
-
-    return AllCatsConfig.map((raw, index) => new CatModel(raw, index.toString()));
-  }
+    _applyCats(json) {
+        this.cats = json.reduce(function (arr, raw) {
+            try {
+                arr.push(new CatModel(raw));
+            } catch (e) {
+                console.log(`Failed to parse cat ${raw}`);
+            }
+            return arr;
+        }, []);
+        this.cats.sort(function (a, b) {
+            return a.id > b.id ? 1 : a.id < b.id ? -1 : 0;
+        });
+    }
 }
 
 export default new CatsManager();

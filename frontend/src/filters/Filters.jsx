@@ -36,20 +36,20 @@ class Filters extends Component {
     }
     return <div>
       <h2 className="uk-margin-large-top">Filters</h2>
-      <div className="uk-form">
+      {/*<div className="uk-form">
         <SearchField value={filtersManager.searchFilter.value}
                      onChange={(e) => this._onSearchChange(filtersManager.searchFilter, e.target.value)}/>
-      </div>
+      </div>*/}
       <div className="uk-flex uk-flex-wrap">
         {filters}
       </div>
       <div>
         <button className="uk-button uk-border-rounded uk-button-primary uk-margin-small-right"
-                onClick={() => CatsManager.reload()}>Find me
+                onClick={() => CatsManager.reloadFiltered()}>Find me
         </button>
         <button className="uk-button uk-border-rounded" onClick={() => {
           filtersManager.resetFilters();
-          CatsManager.reload();
+          CatsManager.reloadFiltered();
         }}>Clear
         </button>
       </div>

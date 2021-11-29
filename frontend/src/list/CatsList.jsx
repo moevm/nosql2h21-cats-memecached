@@ -6,6 +6,7 @@ import './CatsList.css';
 class CatsList extends React.Component {
   constructor(props) {
     super(props);
+    catsManager.reloadFiltered();
     this._onCatsChanged = () => {
       let newState = {cats: catsManager.cats, loading: catsManager.loading};
       if (this._mounted)

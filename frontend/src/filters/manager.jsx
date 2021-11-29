@@ -54,6 +54,9 @@ class FilterBase extends Notifier {
     this.notifyListeners();
   }
 
+  toJsonObject() {
+    throw Error("Not implemented");
+  }
 }
 
 class RangeFilter extends FilterBase {
@@ -94,6 +97,15 @@ class RangeFilter extends FilterBase {
     if (maxValue !== this.max) params.push(`${this.id}_max=${maxValue}`);
     return params;
   }
+
+  toJsonObject() {
+    let res = {
+      min: Math.min(...this.value),
+      max: Math.max(...this.value),
+      localized: this.id,
+    };
+    return res;
+  }
 }
 
 class SearchFilter extends FilterBase {
@@ -126,6 +138,12 @@ class FiltersManager {
   resetFilters() {
     this.searchFilter.resetValue();
     this.rangeFilters.forEach(filter => filter.resetValue());
+  }
+
+  toJsonParameters() {
+    return JSON.stringify({
+      filters: this.rangeFilters.map((e) => e.toJsonObject()),
+    });
   }
 
   toUrlParameters() {
