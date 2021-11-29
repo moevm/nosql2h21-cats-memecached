@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.context.annotation.Primary;
@@ -31,7 +32,7 @@ public class CatsDaoImpl implements CatsDao {
 
     @Override
     public boolean addCat(Cat cat) {
-        String breedName = cat.getBreedName().replace(" ", "_");
+        String breedName = cat.getBreedName().replace(" ", "_").replace("-", "_");
         boolean status = memcachedUtils.addToTuple("all_cats", breedName);
         status &= memcachedUtils.addCompoundCharacteristics(catUtils.compoundCharacteristicsAsMap(cat), breedName);
         status &= memcachedUtils.addStringCharacteristics(catUtils.stringCharacteristicsAsMap(cat), breedName);
@@ -46,10 +47,19 @@ public class CatsDaoImpl implements CatsDao {
 
     @Override
     public Cat getCat(String breedName) {
+        final String processedBreedName = breedName.replace("-", "_").replace(" ", "_");
         return catUtils.catFromKeyValueList(
-            client.getAllKeys().stream().filter(key -> key.startsWith(breedName))
-                  .map(key -> Arrays.asList(key.split("\\.")[1], client.get(key))).collect(Collectors.toList())
+            getCatKeysByBreed(processedBreedName)
+                .stream()
+                .map(key -> Arrays.asList(key.split("\\.")[1], client.get(key)))
+                .collect(Collectors.toList())
         );
+    }
+
+    private List<String> getCatKeysByBreed(String breedName) {
+        return Stream.concat(catUtils.compoundCharacteristics().stream(), catUtils.stringCharacteristics().stream())
+                     .map(field -> String.format("%s.%s", breedName, field))
+                     .collect(Collectors.toList());
     }
 
     // TODO need to be optimized
