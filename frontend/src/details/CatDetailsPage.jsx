@@ -91,7 +91,7 @@ class CatDetailsPage extends React.Component {
       <h3>Breed Characteristics:</h3>
       <div className="uk-flex uk-flex-wrap">
         {Object.keys(model.characteristics).map(key => {
-          let filter = FiltersConfig.find((e) => e.id === key);
+          let filter = FiltersConfig.filters.find((e) => e.id === key);
           return <CharacteristicsCard key={key} name={filter?.localized ?? key} value={model.characteristics[key]}/>
         })}
       </div>

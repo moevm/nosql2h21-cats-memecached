@@ -8,6 +8,7 @@ import {
 import NoMatchPage from "../404/NoMatchPage";
 import SearchPage from "../search/SearchPage";
 import CatDetailsPage from "../details/CatDetailsPage";
+import ImportPage from "../import/ImportPage";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <SearchPage/>
         </Route>
         <Route path="/cats/:catId" component={CatDetailsPage}/>
+        <Route path="/import" component={ImportPage}/>
         <Route path="*">
           <NoMatchPage />
         </Route>

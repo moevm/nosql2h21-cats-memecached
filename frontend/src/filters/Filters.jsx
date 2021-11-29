@@ -36,10 +36,10 @@ class Filters extends Component {
     }
     return <div>
       <h2 className="uk-margin-large-top">Filters</h2>
-      <div className="uk-form">
+      {/*<div className="uk-form">
         <SearchField value={filtersManager.searchFilter.value}
                      onChange={(e) => this._onSearchChange(filtersManager.searchFilter, e.target.value)}/>
-      </div>
+      </div>*/}
       <div className="uk-flex uk-flex-wrap">
         {filters}
       </div>
