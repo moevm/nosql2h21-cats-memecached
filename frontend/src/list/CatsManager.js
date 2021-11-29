@@ -1,7 +1,7 @@
-import AllCatsConfig from './all-cats.json';
 import CatModel from "./CatModel";
 import Notifier from "../utils/Notifier";
 import FiltersManager from "../filters/manager";
+import AppConfig from "../config.json";
 
 class CatsManager extends Notifier {
   constructor() {
@@ -9,10 +9,9 @@ class CatsManager extends Notifier {
     this._currentSession = 0;
     this.loading = false;
     this.cats = [];
-    this.reload();
   }
 
-  async reload() {
+  /*async reload() {
     this._currentSession++;
     let session = this._currentSession;
     this.loading = true;
@@ -30,20 +29,61 @@ class CatsManager extends Notifier {
 
     this.loading = false;
     this.notifyListeners();
-  }
+  }*/
 
   async loadSingle(catId) {
-    let allCats = await this._loadAllInner();
-    return allCats.find(cat => cat.id === catId);
+    catId = catId.replaceAll(" ", "_");
+    try {
+      let url = new URL(`/cats/${catId}`, AppConfig.serverUrl).href;
+      let response = await fetch(url);
+      response = await response.json();
+      console.log("Cat's data loaded");
+      console.log(response);
+      return new CatModel(response, catId);
+    } catch (e) {
+      console.log(e);
+      return null;
+    } finally {
+      this.notifyListeners();
+    }
   }
 
-  async _loadAllInner() {
-    // TODO will be used in requests
-    let params = FiltersManager.toUrlParameters();
-    // imitating request delay
-    await new Promise(resolve => setTimeout(resolve,1000));
+  async reloadAll() {
+    try {
+      let url = new URL(`/cats`, AppConfig.serverUrl).href;
+      let response = await fetch(url);
+      response = await response.json();
+      this.cats = response.reduce(function (arr, raw) {
+        try {
+          arr.push(new CatModel(raw));
+        } catch (e) {
+          console.log(`Failed to parse cat ${raw}`);
+        }
+        return arr;
+      }, []);
+      this.cats.sort(function (a, b) {
+        return a.id > b.id ? 1 : a.id < b.id ? -1 : 0;
+      })
+      console.log("Cats loaded")
+      console.log(this.cats);
+    } catch (e) {
+      console.log(e);
+      return null;
+    } finally {
+      this.notifyListeners();
+    }
+  }
 
-    return AllCatsConfig.map((raw, index) => new CatModel(raw, index.toString()));
+  async reloadFiltered() {
+    try {
+      // TODO add filters
+      await this.reloadAll();
+    } catch (e) {
+      console.log(e);
+      return null;
+    } finally {
+      //TODO this.notifyListeners();
+    }
   }
 }
 

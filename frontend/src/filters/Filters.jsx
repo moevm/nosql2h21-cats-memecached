@@ -45,11 +45,11 @@ class Filters extends Component {
       </div>
       <div>
         <button className="uk-button uk-border-rounded uk-button-primary uk-margin-small-right"
-                onClick={() => CatsManager.reload()}>Find me
+                onClick={() => CatsManager.reloadFiltered()}>Find me
         </button>
         <button className="uk-button uk-border-rounded" onClick={() => {
           filtersManager.resetFilters();
-          CatsManager.reload();
+          CatsManager.reloadFiltered();
         }}>Clear
         </button>
       </div>
