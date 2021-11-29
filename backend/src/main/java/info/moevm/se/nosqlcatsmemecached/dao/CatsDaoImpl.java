@@ -10,6 +10,7 @@ import info.moevm.se.nosqlcatsmemecached.utils.memcached.MemcachedUtils;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -100,6 +101,7 @@ public class CatsDaoImpl implements CatsDao {
     private Set<String> getCatsByFilter(CatFilter catFilter) {
         return IntStream.rangeClosed(catFilter.getMin(), catFilter.getMax())
                         .mapToObj(value -> client.get(getFilterString(catFilter.getLocalized(), value)))
+                        .filter(Objects::nonNull)
                         .map(String::valueOf)
                         .map(memcachedUtils::tupleFrom)
                         .reduce((lhs, rhs) -> {
