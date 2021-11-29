@@ -1,25 +1,25 @@
 {
   "filters": [
     {
-      "id": "affectionate",
+      "id": "affectionateWithFamily",
       "min": 0,
       "max": 5,
       "localized": "Affectionate with Family"
     },
     {
-      "id": "shedding",
+      "id": "amountOfShedding",
       "min": 0,
       "max": 5,
       "localized": "Amount of Shedding"
     },
     {
-      "id": "groom",
+      "id": "easyToGroom",
       "min": 0,
       "max": 5,
       "localized": "Easy to Groom"
     },
     {
-      "id": "health",
+      "id": "generalHealth",
       "min": 0,
       "max": 5,
       "localized": "General Health"
@@ -31,19 +31,19 @@
       "localized": "Intelligence"
     },
     {
-      "id": "kid-friendly",
+      "id": "kidFriendly",
       "min": 0,
       "max": 5,
       "localized": "Kid-Friendly"
     },
     {
-      "id": "pet-friendly",
+      "id": "petFriendly",
       "min": 0,
       "max": 5,
       "localized": "Pet Friendly"
     },
     {
-      "id": "playfulness",
+      "id": "potentialForPlayfulness",
       "min": 0,
       "max": 5,
       "localized": "Potential for Playfulness"
