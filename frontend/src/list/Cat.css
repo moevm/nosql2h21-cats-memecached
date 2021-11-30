@@ -1,0 +1,16 @@
+.cat-list-image-wrapper {
+    display: block;
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    position: relative;
+    text-align: center;
+    border-radius: 50%;
+    border: 2px solid #eee;
+}
+
+.cat-list-image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}

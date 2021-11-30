@@ -1,0 +1,64 @@
+{
+  "filters": [
+    {
+      "id": "affectionateWithFamily",
+      "min": 0,
+      "max": 5,
+      "localized": "Affectionate with Family"
+    },
+    {
+      "id": "amountOfShedding",
+      "min": 0,
+      "max": 5,
+      "localized": "Amount of Shedding"
+    },
+    {
+      "id": "easyToGroom",
+      "min": 0,
+      "max": 5,
+      "localized": "Easy to Groom"
+    },
+    {
+      "id": "generalHealth",
+      "min": 0,
+      "max": 5,
+      "localized": "General Health"
+    },
+    {
+      "id": "intelligence",
+      "min": 0,
+      "max": 5,
+      "localized": "Intelligence"
+    },
+    {
+      "id": "kidFriendly",
+      "min": 0,
+      "max": 5,
+      "localized": "Kid-Friendly"
+    },
+    {
+      "id": "petFriendly",
+      "min": 0,
+      "max": 5,
+      "localized": "Pet Friendly"
+    },
+    {
+      "id": "potentialForPlayfulness",
+      "min": 0,
+      "max": 5,
+      "localized": "Potential for Playfulness"
+    },
+    {
+      "id": "friendlyTowardStrangers",
+      "min": 0,
+      "max": 5,
+      "localized": "Friendly toward strangers"
+    },
+    {
+      "id": "tendencyToVocalize",
+      "min": 0,
+      "max": 5,
+      "localized": "Tendency to vocalize"
+    }
+  ]
+}

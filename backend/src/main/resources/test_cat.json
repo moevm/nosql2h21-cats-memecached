@@ -1,0 +1,30 @@
+[
+    {
+        "breedName": "Test cat",
+        "care": "wibble",
+        "characteristics": {
+            "affectionateWithFamily": 3,
+            "amountOfShedding": 3,
+            "easyToGroom": 3,
+            "generalHealth": 2,
+            "intelligence": 5,
+            "kidFriendly": 5,
+            "petFriendly": 5,
+            "potentialForPlayfulness": 5
+        },
+        "childrenAndPets": "woble",
+        "colorAndGrooming": "wable",
+        "health": "yip",
+        "history": "yup",
+        "personality": "yop",
+        "roundImgUrl": "https://cattime.com/assets/uploads/2011/12/file_2678_Abyssinian-cat-breed.jpg",
+        "shortDescription": "cup",
+        "size": "ryp",
+        "vitalStats": {
+            "length": "12 to 16 inches",
+            "lifeSpan": "9 to 15 years",
+            "origin": "Southeast Asia",
+            "weight": "6 to 10 pounds"
+        }
+    }
+]
