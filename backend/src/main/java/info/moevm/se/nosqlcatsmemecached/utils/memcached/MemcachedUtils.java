@@ -3,6 +3,7 @@ package info.moevm.se.nosqlcatsmemecached.utils.memcached;
 import info.moevm.se.nosqlcatsmemecached.config.MemcachedConfig;
 import info.moevm.se.nosqlcatsmemecached.utils.cat.CatUtils;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -24,6 +25,9 @@ public class MemcachedUtils {
     private final CatUtils catUtils;
 
     public Set<String> tupleFrom(String tupleString) {
+        if (tupleString.equals("null")) {
+            return new HashSet<>();
+        }
         return Arrays.stream(tupleString.split(config.getTupleSeparator().replace("\"", ""))).collect(Collectors.toSet());
     }
 
