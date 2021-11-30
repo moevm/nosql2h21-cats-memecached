@@ -9,6 +9,7 @@ import NoMatchPage from "../404/NoMatchPage";
 import SearchPage from "../search/SearchPage";
 import CatDetailsPage from "../details/CatDetailsPage";
 import ImportPage from "../import/ImportPage";
+import AddCatPage from "../import/AddCatPage";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         </Route>
         <Route path="/cats/:catId" component={CatDetailsPage}/>
         <Route path="/import" component={ImportPage}/>
+        <Route path="/add" component={AddCatPage}/>
         <Route path="*">
           <NoMatchPage />
         </Route>
