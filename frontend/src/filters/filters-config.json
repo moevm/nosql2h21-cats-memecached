@@ -47,6 +47,18 @@
       "min": 0,
       "max": 5,
       "localized": "Potential for Playfulness"
+    },
+    {
+      "id": "friendlyTowardStrangers",
+      "min": 0,
+      "max": 5,
+      "localized": "Friendly toward strangers"
+    },
+    {
+      "id": "tendencyToVocalize",
+      "min": 0,
+      "max": 5,
+      "localized": "Tendency to vocalize"
     }
   ]
 }
