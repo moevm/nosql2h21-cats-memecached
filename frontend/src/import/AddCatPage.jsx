@@ -4,13 +4,6 @@ import {Link, withRouter} from "react-router-dom";
 import FiltersConfig from "../filters/filters-config.json";
 import AppConfig from "../config.json";
 
-const vitalStats = [
-    {id: "length", localized: "Length"},
-    {id: "lifeSpan", localized: "Life span"},
-    {id: "origin", localized: "Origin"},
-    {id: "weight", localized: "Weight"}
-]
-
 class AddCatPage extends React.Component {
     constructor(props) {
         super(props);
@@ -47,7 +40,7 @@ class AddCatPage extends React.Component {
                 roundImgUrl: this.state.roundImgUrl,
                 shortDescription: this.state.shortDescription,
                 size: this.state.size,
-                vitalStats: vitalStats.reduce((arr, e) => {arr[e.id] = this.state[e.id]; return arr}, {}),
+                vitalStats: FiltersConfig.vitalStats.reduce((arr, e) => {arr[e.id] = this.state[e.id]; return arr}, {}),
             };
             const requestOptions = {
                 method: 'POST',
@@ -96,7 +89,7 @@ class AddCatPage extends React.Component {
                 <h3>Vital stats</h3>
                 <div>
                     {
-                        vitalStats.map((stat) => {
+                        FiltersConfig.vitalStats.map((stat) => {
                             return <label>{stat.localized}: <input required type="text" name={stat.id} value={this.state[stat.id] ?? ""}
                                                                 onChange={this.handleInputChange}/><br/></label>
                         })

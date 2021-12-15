@@ -60,5 +60,23 @@
       "max": 5,
       "localized": "Tendency to vocalize"
     }
+  ],
+  "vitalStats": [
+    {
+      "id": "length",
+      "localized": "Length"
+    },
+    {
+      "id": "lifeSpan",
+      "localized": "Life span"
+    },
+    {
+      "id": "origin",
+      "localized": "Origin"
+    },
+    {
+      "id": "weight",
+      "localized": "Weight"
+    }
   ]
 }

@@ -4,6 +4,7 @@ import PageRoot from "../app/PageRoot";
 import CatsList from "../list/CatsList";
 import {Link} from "react-router-dom";
 import AppConfig from "../config.json";
+import ViewAsTable from "../import/ViewAsTable";
 
 class SearchPage extends React.Component{
   async exportAll(e) {
@@ -31,7 +32,7 @@ class SearchPage extends React.Component{
   }
 
   render() {
-    return <PageRoot>
+    let cur = <PageRoot>
       <h1>Cats</h1>
       <div>
         <Link to="/add">Add cat</Link>
@@ -42,8 +43,19 @@ class SearchPage extends React.Component{
         <span> data</span>
       </div>
       <Filters/>
-      <CatsList/>
     </PageRoot>;
+
+    if (this.props.asTable)
+      return <div>
+        {cur}
+        <ViewAsTable/>
+      </div>
+    return <div>
+      {cur}
+      <PageRoot>
+        <CatsList/>
+      </PageRoot>
+    </div>
   }
 }
 
