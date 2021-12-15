@@ -7,5 +7,6 @@ import org.springframework.stereotype.Component;
 @Data
 @Component
 public class CatQuery {
+    private String search;
     private List<CatFilter> filters;
 }

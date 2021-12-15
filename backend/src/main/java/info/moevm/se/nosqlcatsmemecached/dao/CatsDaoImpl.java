@@ -87,9 +87,17 @@ public class CatsDaoImpl implements CatsDao {
                         lhs.retainAll(rhs);
                         return lhs;
                     }).orElseGet(HashSet::new).stream()
+                    .filter(breedName -> filterByBreed(breedName, query.getSearch()))
                     .map(this::getCat)
                     .filter(cat -> !cat.getBreedName().isBlank())
                     .collect(Collectors.toList());
+    }
+
+    private boolean filterByBreed(String breedName, String filter) {
+        if (filter == null) {
+            return true;
+        }
+        return breedName.toLowerCase().contains(filter.toLowerCase());
     }
 
     @SneakyThrows
