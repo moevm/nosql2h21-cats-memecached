@@ -32,7 +32,7 @@ public class CatsController {
     private final CatsExporter exporter;
 
     public CatsController(CatsDao catsDao,
-                          @Qualifier("jsonCatsImporterImpl" )CatsImporter importer,
+                          @Qualifier("jsonCatsImporterImpl") CatsImporter importer,
                           @Qualifier("jsonCatsExporterImpl") CatsExporter exporter) {
         this.catsDao = catsDao;
         this.importer = importer;
