@@ -142,17 +142,18 @@ class FiltersManager {
 
   toJsonParameters() {
     return JSON.stringify({
+      search: this.searchFilter.value,
       filters: this.rangeFilters.map((e) => e.toJsonObject()),
     });
   }
 
-  toUrlParameters() {
+  /*toUrlParameters() {
     let params = [];
     params.push(...this.searchFilter.toUrlParameters());
     for (let filter of this.rangeFilters)
       params.push(...filter.toUrlParameters());
     return params;
-  }
+  }*/
 }
 
 export default new FiltersManager();
