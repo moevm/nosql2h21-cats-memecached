@@ -5,6 +5,7 @@ import CatsList from "../list/CatsList";
 import {Link} from "react-router-dom";
 import AppConfig from "../config.json";
 import ViewAsTable from "../import/ViewAsTable";
+import ViewAsGraph from "../import/ViewAsGraph";
 
 class SearchPage extends React.Component{
   async exportAll(e) {
@@ -49,6 +50,11 @@ class SearchPage extends React.Component{
       return <div>
         {cur}
         <ViewAsTable/>
+      </div>
+    if (this.props.asGraph)
+      return <div>
+        {cur}
+        <ViewAsGraph/>
       </div>
     return <div>
       {cur}

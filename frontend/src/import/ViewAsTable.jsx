@@ -57,6 +57,8 @@ class ViewAsTable extends React.Component {
                 <h2 className="uk-margin-large-top">Found results</h2>
                 <div className="uk-margin-bottom">
                     <Link to="/">View as list</Link>
+                    <span> | </span>
+                    <Link to="/graph">View as graph</Link>
                 </div>
             </PageRoot>
             <div className="uk-margin-large-left uk-margin-large-right">

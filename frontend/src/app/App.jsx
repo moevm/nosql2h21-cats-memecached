@@ -21,6 +21,9 @@ function App() {
         <Route path="/table">
           <SearchPage asTable={true}/>
         </Route>
+        <Route path="/graph">
+          <SearchPage asGraph={true}/>
+        </Route>
         <Route path="/cats/:catId" component={CatDetailsPage}/>
         <Route path="/import" component={ImportPage}/>
         <Route path="/add" component={AddCatPage}/>

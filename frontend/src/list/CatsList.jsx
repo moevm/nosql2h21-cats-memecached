@@ -43,7 +43,8 @@ class CatsList extends React.Component {
       <h2 className="uk-margin-large-top">Found results</h2>
       <div className="uk-margin-bottom">
         <Link to="/table">View as table</Link>
-        <br/>
+        <span> | </span>
+        <Link to="/graph">View as graph</Link>
       </div>
       <div className="uk-flex uk-flex-wrap">
         {catsList}
