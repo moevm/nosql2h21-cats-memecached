@@ -2,6 +2,7 @@ import React from "react";
 import catsManager from "./CatsManager";
 import CatItem from "./CatItem";
 import './CatsList.css';
+import {Link} from "react-router-dom";
 
 class CatsList extends React.Component {
   constructor(props) {
@@ -40,6 +41,11 @@ class CatsList extends React.Component {
     </div>);
     return <div>
       <h2 className="uk-margin-large-top">Found results</h2>
+      <div className="uk-margin-bottom">
+        <Link to="/table">View as table</Link>
+        <span> | </span>
+        <Link to="/graph">View as graph</Link>
+      </div>
       <div className="uk-flex uk-flex-wrap">
         {catsList}
       </div>

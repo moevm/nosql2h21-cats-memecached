@@ -1,7 +1,7 @@
 import React from "react";
 import CatsManager from "../list/CatsManager";
 import PageRoot from "../app/PageRoot";
-import {Link} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 import "./CatDetailsPage.css";
 import FiltersConfig from "../filters/filters-config.json";
 
@@ -66,19 +66,19 @@ class CatDetailsPage extends React.Component {
   render() {
     if (this.state?.loading)
       return <PageRoot>
-        <Link to="/"><i className="uk-icon-angle-left"/> Back to list</Link>
+        <a onClick={(e) => {this.props.history.goBack(); e.preventDefault()}}><i className="uk-icon-angle-left"/> Back</a>
         <h2>Loading your cat...</h2>
       </PageRoot>;
 
     if (!this.state?.model)
       return <PageRoot>
-        <Link to="/">Back to list</Link>
+        <a onClick={(e) => {this.props.history.goBack(); e.preventDefault()}}><i className="uk-icon-angle-left"/> Back</a>
         <h2>Failed to load your cat :(</h2>
       </PageRoot>;
 
     let model = this.state.model;
     return <PageRoot>
-      <Link to="/"><i className="uk-icon-angle-left"/> Back to list</Link>
+      <a onClick={(e) => {this.props.history.goBack(); e.preventDefault()}}><i className="uk-icon-angle-left"/> Back</a>
       <h2>{model.name}</h2>
       <div className="uk-flex">
         <div className="cat-details-image-wrapper uk-flex-item-none uk-margin-right">
@@ -119,4 +119,4 @@ class CatDetailsPage extends React.Component {
   }
 }
 
-export default CatDetailsPage;
+export default withRouter(CatDetailsPage);
