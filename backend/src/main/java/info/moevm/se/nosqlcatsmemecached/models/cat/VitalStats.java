@@ -1,8 +1,6 @@
 package info.moevm.se.nosqlcatsmemecached.models.cat;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.google.gson.annotations.SerializedName;
 import info.moevm.se.nosqlcatsmemecached.annotations.MemcachedName;
 import lombok.Data;
 import org.springframework.stereotype.Component;

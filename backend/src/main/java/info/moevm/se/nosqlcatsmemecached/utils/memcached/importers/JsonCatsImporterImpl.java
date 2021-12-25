@@ -6,10 +6,11 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import info.moevm.se.nosqlcatsmemecached.dao.CatsDao;
 import info.moevm.se.nosqlcatsmemecached.models.cat.Cat;
-import java.io.File;
-import java.util.List;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
+
+import java.io.File;
+import java.util.List;
 
 @Service
 public class JsonCatsImporterImpl implements CatsImporter {

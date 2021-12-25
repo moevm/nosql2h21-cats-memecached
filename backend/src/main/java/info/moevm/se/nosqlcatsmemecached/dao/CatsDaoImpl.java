@@ -7,18 +7,15 @@ import info.moevm.se.nosqlcatsmemecached.models.cat.CatQuery;
 import info.moevm.se.nosqlcatsmemecached.utils.cat.CatUtils;
 import info.moevm.se.nosqlcatsmemecached.utils.memcached.CatsMemcachedClient;
 import info.moevm.se.nosqlcatsmemecached.utils.memcached.MemcachedUtils;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
+
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 @Repository
 @Primary
@@ -50,17 +47,17 @@ public class CatsDaoImpl implements CatsDao {
     public Cat getCat(String breedName) {
         final String processedBreedName = breedName.replace("-", "_").replace(" ", "_");
         return catUtils.catFromKeyValueList(
-            getCatKeysByBreed(processedBreedName)
-                .stream()
-                .map(key -> Arrays.asList(key.split("\\.")[1], client.get(key)))
-                .collect(Collectors.toList())
+                getCatKeysByBreed(processedBreedName)
+                        .stream()
+                        .map(key -> Arrays.asList(key.split("\\.")[1], client.get(key)))
+                        .collect(Collectors.toList())
         );
     }
 
     private List<String> getCatKeysByBreed(String breedName) {
         return Stream.concat(catUtils.compoundCharacteristics().stream(), catUtils.stringCharacteristics().stream())
-                     .map(field -> String.format("%s.%s", breedName, field))
-                     .collect(Collectors.toList());
+                .map(field -> String.format("%s.%s", breedName, field))
+                .collect(Collectors.toList());
     }
 
     // TODO need to be optimized
@@ -82,15 +79,15 @@ public class CatsDaoImpl implements CatsDao {
     @Override
     public List<Cat> getCatsByQuery(CatQuery query) {
         return query.getFilters().stream()
-                    .map(this::getCatsByFilter)
-                    .reduce((lhs, rhs) -> {
-                        lhs.retainAll(rhs);
-                        return lhs;
-                    }).orElseGet(HashSet::new).stream()
-                    .filter(breedName -> filterByBreed(breedName, query.getSearch()))
-                    .map(this::getCat)
-                    .filter(cat -> !cat.getBreedName().isBlank())
-                    .collect(Collectors.toList());
+                .map(this::getCatsByFilter)
+                .reduce((lhs, rhs) -> {
+                    lhs.retainAll(rhs);
+                    return lhs;
+                }).orElseGet(HashSet::new).stream()
+                .filter(breedName -> filterByBreed(breedName, query.getSearch()))
+                .map(this::getCat)
+                .filter(cat -> !cat.getBreedName().isBlank())
+                .collect(Collectors.toList());
     }
 
     private boolean filterByBreed(String breedName, String filter) {
@@ -108,21 +105,21 @@ public class CatsDaoImpl implements CatsDao {
 
     private Set<String> getCatsByFilter(CatFilter catFilter) {
         return IntStream.rangeClosed(catFilter.getMin(), catFilter.getMax())
-                        .mapToObj(value -> client.get(getFilterString(catFilter.getLocalized(), value)))
-                        .filter(Objects::nonNull)
-                        .map(String::valueOf)
-                        .map(memcachedUtils::tupleFrom)
-                        .reduce((lhs, rhs) -> {
-                            lhs.addAll(rhs);
-                            return lhs;
-                        }).orElseGet(HashSet::new);
+                .mapToObj(value -> client.get(getFilterString(catFilter.getLocalized(), value)))
+                .filter(Objects::nonNull)
+                .map(String::valueOf)
+                .map(memcachedUtils::tupleFrom)
+                .reduce((lhs, rhs) -> {
+                    lhs.addAll(rhs);
+                    return lhs;
+                }).orElseGet(HashSet::new);
     }
 
     private String getFilterString(String localized, int value) {
         return String.format(
-            "%s.%s",
-            CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, localized),
-            value
+                "%s.%s",
+                CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, localized),
+                value
         );
     }
 }

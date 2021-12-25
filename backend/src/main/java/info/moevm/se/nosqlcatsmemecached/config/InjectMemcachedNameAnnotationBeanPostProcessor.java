@@ -3,16 +3,17 @@ package info.moevm.se.nosqlcatsmemecached.config;
 import com.google.common.base.CaseFormat;
 import info.moevm.se.nosqlcatsmemecached.annotations.InjectMemcachedName;
 import info.moevm.se.nosqlcatsmemecached.annotations.MemcachedName;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import lombok.SneakyThrows;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ReflectionUtils;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class InjectMemcachedNameAnnotationBeanPostProcessor implements BeanPostProcessor {
@@ -28,7 +29,7 @@ public class InjectMemcachedNameAnnotationBeanPostProcessor implements BeanPostP
                 String targetClassName = injectMemcachedNameAnnotation.value();
                 injectMemcachedNameField.setAccessible(true);
                 ReflectionUtils.setField(injectMemcachedNameField, bean,
-                    getMapForInject(injectMemcachedNameAnnotation.value(), injectMemcachedNameAnnotation.type()));
+                        getMapForInject(injectMemcachedNameAnnotation.value(), injectMemcachedNameAnnotation.type()));
             }
         }
         return bean;
@@ -45,9 +46,9 @@ public class InjectMemcachedNameAnnotationBeanPostProcessor implements BeanPostP
                 String value = memcachedNameAnnotation.value();
                 String name = type.equals("getter") ? methodName(value, "get_") : methodName(value, "set_");
                 map.put(value,
-                    Arrays.stream(targetClass.getDeclaredMethods())
-                          .filter(method -> method.getName().contains(name)).findFirst()
-                          .get());
+                        Arrays.stream(targetClass.getDeclaredMethods())
+                                .filter(method -> method.getName().contains(name)).findFirst()
+                                .get());
             }
         }
         return map;
