@@ -2,17 +2,14 @@ package info.moevm.se.nosqlcatsmemecached.utils.memcached;
 
 import info.moevm.se.nosqlcatsmemecached.config.MemcachedConfig;
 import info.moevm.se.nosqlcatsmemecached.utils.cat.CatUtils;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import net.spy.memcached.internal.OperationFuture;
 import org.springframework.stereotype.Service;
+
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +29,7 @@ public class MemcachedUtils {
     }
 
     public String stringFrom(Set<String> uniqueValues) {
-        return String.join(config.getTupleSeparator().replace("\"",""), uniqueValues);
+        return String.join(config.getTupleSeparator().replace("\"", ""), uniqueValues);
     }
 
     public String keyName(String... items) {
@@ -45,8 +42,8 @@ public class MemcachedUtils {
         for (Map.Entry<String, String> characteristic : map.entrySet()) {
             if (characteristic.getValue() != null) {
                 status = status & client.add(
-                    keyName(breedName, characteristic.getKey()), config.getExpirationTime(),
-                    characteristic.getValue()).get();
+                        keyName(breedName, characteristic.getKey()), config.getExpirationTime(),
+                        characteristic.getValue()).get();
             }
         }
         return status;
@@ -58,10 +55,10 @@ public class MemcachedUtils {
         for (Map.Entry<String, ?> characteristic : map.entrySet()) {
             if (characteristic.getValue() != null) {
                 status = status & addToTuple(
-                    keyName(characteristic.getKey(),
-                        characteristic.getValue().toString().replace(" ", "_")), breedName);
+                        keyName(characteristic.getKey(),
+                                characteristic.getValue().toString().replace(" ", "_")), breedName);
                 status = status & client.add(keyName(breedName, characteristic.getKey()),
-                    config.getExpirationTime(), characteristic.getValue()).get();
+                        config.getExpirationTime(), characteristic.getValue()).get();
             }
         }
         return status;
@@ -85,12 +82,12 @@ public class MemcachedUtils {
         final Set<String> stringKeys = catUtils.stringCharacteristics();
 
         boolean status = Stream.concat(compoundKeys.stream(), stringKeys.stream())
-                               .map(secondKey -> client.delete(keyName(breedName, secondKey)))
-                               .map(this::uncheckedGet).reduce(true, (a, b) -> a && b);
+                .map(secondKey -> client.delete(keyName(breedName, secondKey)))
+                .map(this::uncheckedGet).reduce(true, (a, b) -> a && b);
         final List<String> allKeys = client.getAllKeys();
         compoundKeys.forEach(compoundKey -> {
             allKeys.stream().filter(k -> k.startsWith(compoundKey))
-                   .forEach(filteredCompoundKey -> deleteFromTuple(filteredCompoundKey, breedName));
+                    .forEach(filteredCompoundKey -> deleteFromTuple(filteredCompoundKey, breedName));
         });
         return status;
     }

@@ -3,8 +3,9 @@ package info.moevm.se.nosqlcatsmemecached.utils.memcached.importers;
 import info.moevm.se.nosqlcatsmemecached.config.MemcachedConfig;
 import info.moevm.se.nosqlcatsmemecached.dao.CatsDao;
 import info.moevm.se.nosqlcatsmemecached.utils.memcached.CatsMemcachedClient;
-import java.util.Map;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 @Service
 public class FromMapImporterImpl {
