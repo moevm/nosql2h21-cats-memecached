@@ -1,9 +1,17 @@
 package info.moevm.se.nosqlcatsmemecached.utils.cat;
 
+import com.google.common.base.Charsets;
+import com.google.common.io.Files;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import info.moevm.se.nosqlcatsmemecached.annotations.InjectMemcachedName;
 import info.moevm.se.nosqlcatsmemecached.models.cat.Cat;
 import info.moevm.se.nosqlcatsmemecached.models.cat.Characteristics;
 import info.moevm.se.nosqlcatsmemecached.models.cat.VitalStats;
+import lombok.SneakyThrows;
+import org.springframework.stereotype.Service;
+
+import java.io.File;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
@@ -11,8 +19,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import lombok.SneakyThrows;
-import org.springframework.stereotype.Service;
 
 @Service
 public class CatUtils {
@@ -58,7 +64,7 @@ public class CatUtils {
 
     public Set<String> compoundCharacteristics() {
         return Stream.concat(characteristicsKeyToGetter.keySet().stream(), vitalStatsKeyToGetter.keySet().stream())
-                     .collect(Collectors.toSet());
+                .collect(Collectors.toSet());
     }
 
     public Set<String> stringCharacteristics() {
@@ -85,14 +91,24 @@ public class CatUtils {
     @SneakyThrows
     @SuppressWarnings("all")
     private void setField(Object key, Object value, Cat cat, VitalStats vitalStats,
-                                 Characteristics characteristics) {
+                          Characteristics characteristics) {
         key = String.valueOf(key).replaceAll("\"", "");
         if (catsKeyToSetter.containsKey(key)) {
-            catsKeyToSetter.get(key).invoke(cat, new Object[] {value});
+            catsKeyToSetter.get(key).invoke(cat, new Object[]{value});
         } else if (vitalStatsKeyToSetter.containsKey(key)) {
-            vitalStatsKeyToSetter.get(key).invoke(vitalStats, new Object[] {value});
+            vitalStatsKeyToSetter.get(key).invoke(vitalStats, new Object[]{value});
         } else if (characteristicsKeyToSetter.containsKey(key)) {
-            characteristicsKeyToSetter.get(key).invoke(characteristics, new Object[] {value});
+            characteristicsKeyToSetter.get(key).invoke(characteristics, new Object[]{value});
         }
+    }
+
+    @SneakyThrows
+    @SuppressWarnings("all")
+    public static List<Cat> getListCatsFromFile(String filename) {
+        File file = new File(CatUtils.class
+                .getClassLoader().getResource(filename).getFile());
+        String jsonString = String.join("", Files.readLines(file, Charsets.UTF_8));
+        return new Gson().fromJson(jsonString, new TypeToken<List<Cat>>() {
+        }.getType());
     }
 }

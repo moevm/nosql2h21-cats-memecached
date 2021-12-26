@@ -1,0 +1,47 @@
+\documentclass[14pt]{extarticle}
+\usepackage [utf8] {inputenc}
+\usepackage [T2A] {fontenc}
+\usepackage[top=2cm, bottom=2cm, left=3cm, right=2cm]{geometry}
+\usepackage{indentfirst}
+\usepackage{paralist}
+\usepackage{titlesec}
+\usepackage[english,russian]{babel}
+\usepackage{fontspec}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{courier}
+\usepackage{amsfonts}
+\usepackage{lipsum}
+\usepackage{longtable}
+\setmonofont{Courier New}
+\lstset{basicstyle=\small\ttfamily,breaklines=true}
+\lstset{framextopmargin=50pt,frame=none}
+\renewcommand{\lstlistingname}{Листинг}
+\RequirePackage{caption}
+\DeclareCaptionLabelSeparator{defffis}{ -- }
+\captionsetup{justification=centering,labelsep=defffis}
+\defaultfontfeatures{Ligatures={TeX},Renderer=Basic}
+\setmainfont[Ligatures={TeX,Historic}]{Times New Roman}
+\frenchspacing
+\renewcommand{\baselinestretch}{1.5}
+\setlength{\parskip}{0em}
+\renewenvironment{itemize}[1]{\begin{compactitem}#1}{\end{compactitem}}
+\renewenvironment{enumerate}[1]{\begin{compactenum}#1}{\end{compactenum}}
+\titleformat{\section}{\centering\normalfont\bfseries}{\thechapter}{14pt}{\MakeUppercase}
+\titlespacing{\section}{1.25cm}{1cm}{0.5cm}
+\titleformat{\subsection}{\normalfont\bfseries}{\thechapter}{14pt}{\bfseries}
+\titlespacing{\subsection}{1.25cm}{1cm}{0cm}
+\parindent=1.25cm
+\graphicspath{{images/}}
+\DeclareGraphicsExtensions{.pdf,.png,.jpg}
+\begin{document}
+
+\input{title.tex}
+\input{second.tex}
+\input{annotation.tex}
+\input{toc.tex}
+\input{main.tex}
+
+\end{document}
